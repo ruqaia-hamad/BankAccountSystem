@@ -8,6 +8,7 @@ import com.BankAccountSystem.BankAccountSystem.Repositories.CreditCardRepository
 import com.BankAccountSystem.BankAccountSystem.Repositories.CustomerRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequest;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequestForUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,25 @@ public class CreditCardService {
         creditCard.setCustomer(customer);
         creditCardRepository.save(creditCard);
 
+    }
+
+    public void updateNewCard(CreditCardRequestForUpdate creditCardRequestForUpdate) throws ParseException {
+        CreditCard creditCard=new CreditCard();
+        creditCard.setId(creditCardRequestForUpdate.getId());
+        creditCard.setCardNumber(creditCardRequestForUpdate.getCardNumber());
+        creditCard.setCreditLimit(creditCardRequestForUpdate.getCreditLimit());
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date convetedDate = formatter.parse(creditCardRequestForUpdate.getCreatedDate());
+        creditCard.setCreatedDate(convetedDate);
+        creditCard.setIsActive(creditCardRequestForUpdate.getIsActive());
+        Customer customer = customerRepository.getCustomerById(creditCardRequestForUpdate.getCustomerId());
+        creditCard.setCustomer(customer);
+        creditCardRepository.save(creditCard);
+
+    }
+
+    public void deleteCreditCard(Integer id) {
+       creditCardRepository.deleteCreditCard(id);
     }
 
 }

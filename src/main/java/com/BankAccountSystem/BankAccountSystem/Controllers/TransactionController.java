@@ -3,6 +3,7 @@ package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,19 @@ public class TransactionController {
         } catch (Exception e) {
 
             return "Transaction creation failed";
+        }
+
+    }
+
+
+    @RequestMapping(value = "/updateTransaction", method = RequestMethod.POST)
+    public String updateTransaction(@RequestBody TransactionRequestForUpdate transactionRequestForUpdate)throws ParseException {
+        try {
+            transactionService.updateTransaction(transactionRequestForUpdate);
+            return " Transaction updated Successfully ";
+        } catch (Exception e) {
+
+            return "Transaction updated failed";
         }
 
     }

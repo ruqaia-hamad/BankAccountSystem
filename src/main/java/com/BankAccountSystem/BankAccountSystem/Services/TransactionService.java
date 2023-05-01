@@ -8,6 +8,7 @@ import com.BankAccountSystem.BankAccountSystem.Repositories.AccountRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.TransactionRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequestForUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,26 @@ public class TransactionService {
         transactionRepository.save(transaction);
 
 
+    }
+
+    public void updateTransaction(TransactionRequestForUpdate transactionRequestForUpdate) throws ParseException {
+        Transaction transaction = new Transaction();
+        transaction.setId(transactionRequestForUpdate.getId());
+        transaction.setAmount(transactionRequestForUpdate.getAmount());
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date convetedDate = formatter.parse(transactionRequestForUpdate.getTransactionDate());
+        transaction.setTransactionDate(convetedDate);
+        Date convetedDate2 = formatter.parse(transactionRequestForUpdate.getCreatedDate());
+        transaction.setCreatedDate(convetedDate2);
+        transaction.setIsActive(transactionRequestForUpdate.getIsActive());
+        Account account=accountRepository.getAccountById(transactionRequestForUpdate.getAccountId());
+        transaction.setAccount(account);
+        transactionRepository.save(transaction);
+
+
+    }
+
+    public void deleteTransaction(Integer id) {
+        transactionRepository.deleteTransaction(id);
     }
 }

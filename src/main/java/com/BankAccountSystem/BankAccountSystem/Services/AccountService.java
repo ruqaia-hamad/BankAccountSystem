@@ -5,6 +5,7 @@ import com.BankAccountSystem.BankAccountSystem.Models.Customer;
 import com.BankAccountSystem.BankAccountSystem.Repositories.AccountRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CustomerRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequestForUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,4 +38,27 @@ public class AccountService {
         accountRepository.save(account);
 
     }
+
+
+
+    public void updateAccount(AccountRequestForUpdate accountRequestForUpdate) throws ParseException {
+        Account account = new Account();
+        account.setId(accountRequestForUpdate.getId());
+        account.setAccountNumber(accountRequestForUpdate.getAccountNumber());
+        account.setAmount(accountRequestForUpdate.getAmount());
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date convetedDate = formatter.parse(accountRequestForUpdate.getCreatedDate());
+        account.setCreatedDate(convetedDate);
+        account.setIsActive(accountRequestForUpdate.getIsActive());
+        Customer customer = customerRepository.getCustomerById(accountRequestForUpdate.getCustomerId());
+        account.setCustomer(customer);
+        accountRepository.save(account);
+
+    }
+
+
+    public void deleteAccount(Integer id) {
+        accountRepository.deleteAccount(id);
+    }
+
 }
