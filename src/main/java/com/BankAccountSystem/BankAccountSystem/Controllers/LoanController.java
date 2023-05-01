@@ -46,4 +46,17 @@ public class LoanController {
         }
 
     }
+
+
+    @RequestMapping(value = "/deleteLoan", method = RequestMethod.GET)
+    public String deleteLoan(Integer id) {
+        try {
+            loanService.deleteLoan(id);
+            return " Loan deleted Successfully ";
+        } catch (Exception e) {
+
+            return "Loan delete failed";
+        }
+
+    }
 }

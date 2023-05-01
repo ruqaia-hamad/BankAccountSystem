@@ -47,4 +47,14 @@ public class CustomerController {
     }
 
 
+    @RequestMapping(value = "/deleteCustomer", method = RequestMethod.GET)
+    public String deleteCustomer(Integer id) {
+        try {
+            customerService.deleteCustomer(id);
+            return " customer deleted Successfully ";
+        } catch (Exception e) {
+            return "customer delete failed";
+        }
+
+    }
 }

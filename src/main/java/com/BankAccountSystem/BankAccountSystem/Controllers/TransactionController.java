@@ -46,4 +46,18 @@ public class TransactionController {
         }
 
     }
+
+
+    @RequestMapping(value = "/updateTransaction", method = RequestMethod.POST)
+    public String deleteTransaction(Integer id) {
+        try {
+            transactionService.deleteTransaction(id);
+            return " Transaction deleted Successfully ";
+        } catch (Exception e) {
+
+            return "Transaction delete failed";
+        }
+
+    }
+
 }
