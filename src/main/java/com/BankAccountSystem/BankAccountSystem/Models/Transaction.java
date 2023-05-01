@@ -1,4 +1,4 @@
-package Models;
+package com.BankAccountSystem.BankAccountSystem.Models;
 
 import lombok.Data;
 import lombok.Getter;
@@ -10,11 +10,12 @@ import java.util.Date;
 @Setter
 @Getter
 @Data
+@Table(name = "account_transaction")
 public class Transaction {
 
 
     @ManyToOne
-    @JoinColumn(name = "Account_Id", referencedColumnName = "id")
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     Account account;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

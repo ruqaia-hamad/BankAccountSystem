@@ -1,4 +1,4 @@
-package Models;
+package com.BankAccountSystem.BankAccountSystem.Models;
 
 
 import lombok.Data;
