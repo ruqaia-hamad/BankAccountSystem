@@ -26,7 +26,7 @@ public class TransactionController {
     public String createTransaction(@RequestBody TransactionRequest transactionRequest)throws ParseException {
         try {
             transactionService.CreateNewTransaction(transactionRequest);
-            return " Transaction created Successfully ";
+            return " Transaction created Successfully";
         } catch (Exception e) {
 
             return "Transaction creation failed";
