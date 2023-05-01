@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Data
-public class Account {
+public class Account extends  BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class Account {
 
     private Double amount ;
 
-    private Integer AccountNumber;
+    private Integer accountNumber;
 
     @ManyToOne
     @JoinColumn(name = "Customer_Id", referencedColumnName = "id")

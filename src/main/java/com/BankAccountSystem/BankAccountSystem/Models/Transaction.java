@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @Data
 @Table(name = "account_transaction")
-public class Transaction {
+public class Transaction  extends  BaseEntity{
 
 
     @ManyToOne

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Data
-public class Loan {
+public class Loan  extends  BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "Customer_Id", referencedColumnName = "id")

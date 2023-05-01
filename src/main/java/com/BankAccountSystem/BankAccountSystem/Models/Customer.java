@@ -14,15 +14,15 @@ import javax.persistence.Id;
 @Setter
 @Getter
 @Data
-public class Customer {
+public class Customer extends  BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String  CustomerName;
+    private String  customerName;
 
-    private String Email;
+    private String email;
 
     private String phoneNumber;
 

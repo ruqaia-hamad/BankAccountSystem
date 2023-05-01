@@ -1,6 +1,7 @@
 package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 import com.BankAccountSystem.BankAccountSystem.Models.Customer;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.CustomerRequestForCreateCustomer;
 import com.BankAccountSystem.BankAccountSystem.Services.CustomerService;
 import com.BankAccountSystem.BankAccountSystem.Slack.SlackClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.ParseException;
 
 @RestController
+@RequestMapping(value = "Customer")
 public class CustomerController {
 
     @Autowired
@@ -20,9 +22,9 @@ public class CustomerController {
     @Autowired
     SlackClient slackClient;
     @RequestMapping(value = "/createCustomer", method = RequestMethod.POST)
-    public String createCustomer(@RequestBody Customer customer) throws ParseException {
+    public String createCustomer(@RequestBody CustomerRequestForCreateCustomer customerRequest)throws ParseException  {
         try {
-            customerService.CreateNewCustomer(customer.getCustomerName(), customer.getPhoneNumber(),customer.getEmail());
+            customerService.CreateNewCustomer(customerRequest);
             slackClient.sendMessage(" new customer  sign up Successfully ");
             return " new customer  sign up Successfully ";
         } catch (Exception e) {
