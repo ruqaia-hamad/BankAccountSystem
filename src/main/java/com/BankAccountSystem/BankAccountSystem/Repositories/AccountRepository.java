@@ -30,4 +30,7 @@ public interface AccountRepository  extends JpaRepository<Account, Integer> {
     List<Account> findByCustomer(Customer customer);
 
     Account findByAccountNumber(Integer accountNumber);
+
+    @Query(value = "SELECT m FROM Account m")
+    List<Account> getAllAccounts();
 }
