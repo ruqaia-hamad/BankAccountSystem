@@ -25,4 +25,9 @@ public class Account extends  BaseEntity {
     @JoinColumn(name = "Customer_Id", referencedColumnName = "id")
     Customer customer;
 
+
+    public void updateBalance(Double amount) {
+        this.amount += amount;
+    }
+
 }

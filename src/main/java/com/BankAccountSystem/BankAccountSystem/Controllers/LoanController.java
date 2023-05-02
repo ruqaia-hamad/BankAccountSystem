@@ -4,6 +4,7 @@ package com.BankAccountSystem.BankAccountSystem.Controllers;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequestForUpdate;
+import com.BankAccountSystem.BankAccountSystem.SchedulesJobs.Schedule;
 import com.BankAccountSystem.BankAccountSystem.Services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,10 @@ public class LoanController {
 
     @Autowired
     LoanService loanService;
+
+
+    @Autowired
+    Schedule schedule;
 
 
     @RequestMapping(value = "/createLoan", method = RequestMethod.POST)
@@ -58,5 +63,12 @@ public class LoanController {
             return "Loan delete failed";
         }
 
+    }
+
+
+    @RequestMapping("/calculateInterest")
+    public String calculateInterest() {
+        schedule.calculateDailyInterest();
+        return "Interest calculation complete.";
     }
 }

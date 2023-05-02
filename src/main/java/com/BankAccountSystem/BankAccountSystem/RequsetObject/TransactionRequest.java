@@ -4,7 +4,6 @@ package com.BankAccountSystem.BankAccountSystem.RequsetObject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.Date;
 
 @Setter
@@ -14,7 +13,6 @@ public class TransactionRequest {
 
     private Double amount;
     private String transactionDate;
-    private  String createdDate;
     private Boolean isActive;
     private Integer accountId;
 }

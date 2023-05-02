@@ -1,17 +1,20 @@
 package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 
+import com.BankAccountSystem.BankAccountSystem.Models.Transaction;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CustomerRequestForCreateCustomer;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
 import com.BankAccountSystem.BankAccountSystem.Services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "Account")
@@ -20,6 +23,8 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+
+
 
 
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
@@ -58,4 +63,40 @@ public class AccountController {
             return "Account deletion failed";
         }
     }
+
+
+    @PostMapping("/updateBalance")
+    public String makeTransaction(@RequestBody TransactionRequest transactionRequest) {
+        accountService.updateBalance(transactionRequest);
+        return "Transaction completed successfully";
+    }
+
+
+    @GetMapping("/{accountId}/interest")
+    public ResponseEntity<?> calculateInterestForAccount(@PathVariable Integer accountId) {
+        Double interest = accountService.calculateInterestForAccount(accountId);
+        String message = "Interest calculated successfully.";
+        Map<String, Object> response = new HashMap<>();
+        response.put("interest", interest);
+        response.put("message", message);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/{accountId}/accountStatement")
+    public ResponseEntity<String> generateMonthlyStatementForAccount(@PathVariable Integer accountId) {
+        String statement = accountService.generateMonthlyStatement(accountId);
+        return ResponseEntity.ok(statement);
+    }
+
+
+
+    @GetMapping("/{accountId}/accountHistory")
+    public ResponseEntity<List<Transaction>> getAccountHistory(@PathVariable Integer accountId) {
+        List<Transaction> transactions = accountService.getAccountHistory(accountId);
+        return ResponseEntity.ok(transactions);
+    }
+
+
 }
+
