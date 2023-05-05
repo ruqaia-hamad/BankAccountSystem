@@ -1,5 +1,6 @@
 package com.BankAccountSystem.BankAccountSystem.Repositories;
 
+import com.BankAccountSystem.BankAccountSystem.Models.Account;
 import com.BankAccountSystem.BankAccountSystem.Models.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface CustomerRepository  extends JpaRepository<Customer, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
+    @Query("SELECT a FROM Account a WHERE a.customer = :customer")
+    List<Account> getAccountsByCustomer(@Param("customer") Customer customer);
 
     @Query(value = "SELECT m FROM Customer m where m.id= :customerId")
     Customer getCustomerById(@Param("customerId") Integer id);
