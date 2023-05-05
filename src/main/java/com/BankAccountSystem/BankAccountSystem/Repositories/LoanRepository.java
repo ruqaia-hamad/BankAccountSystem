@@ -30,4 +30,7 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
     @Query(value = "\n" +
             "select * from loan where customer_id=:customerId", nativeQuery = true)
     List<Loan> getLoansByCustomerId(@Param("customerId") Integer customerId);
+
+    @Query (value = "SELECT * FROM loan WHERE is_active = 1", nativeQuery = true)
+    List<Loan> getActiveLoans();
 }

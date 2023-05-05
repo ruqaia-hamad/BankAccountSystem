@@ -27,17 +27,19 @@ public class Schedule {
     private AccountService  accountService;
 
     @Scheduled(cron = "0 0 0 * * ?")
-    public void calculateDailyInterest() {
-        List<Customer> customers = customerRepository.getAllCustomers();
-        for (Customer customer : customers) {
-            List<Loan> loans = loanRepository.getLoansByCustomerId(customer.getId());
-            for (Loan loan : loans) {
-                double interest = loan.getInsertRate() / 365 * loan.getAmount();
-                loan.setAmount(loan.getAmount() + interest);
-                loanRepository.save(loan);
-            }
+    public void calculateDailyLoanInterest() {
+        List<Loan> loans = loanRepository.getActiveLoans();
 
-            }
+        // Iterate over each loan and calculate the daily interest
+        for (Loan loan : loans) {
+            Double interestRate = loan.getInsertRate() / 365;
+            Double currentBalance = loan.getAmount();
+            Double interestCalculation= currentBalance * interestRate;
+            Double newBalance=currentBalance+interestCalculation;
+            loan.setAmount(newBalance);
+            loanRepository.save(loan);
         }
     }
+
+}
 
