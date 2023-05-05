@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value= "/creditCard")
@@ -96,4 +97,21 @@ public class CreditCardController {
             String errorMessage = e.getMessage();
             return ResponseEntity.badRequest().body(errorMessage);
         }}
+
+
+    @GetMapping("/findCreditByCustomer")
+    public ResponseEntity<?> getCreditByCustomer(@RequestParam("customerId") Integer customerId) {
+        List<CreditCard> creditCards = creditCardService.getCreditCardByCustomerId(customerId);
+        if (creditCards.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Credit Card Found for Customer " + customerId);
+        }
+        return ResponseEntity.ok(creditCards);
+    }
+
+
+    @GetMapping("/getCreditCardByStatus")
+    public String getCreditCardByStatus(@RequestParam Integer creditCardId) {
+        CreditCard creditCard = creditCardService.getCreditCardById(creditCardId);
+        return "The Credit Card Status is :" + creditCard.getStatus();
+    }
 }

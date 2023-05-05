@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Data
-public class CreditCard extends  BaseEntity {
+public class CreditCard extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,7 +19,7 @@ public class CreditCard extends  BaseEntity {
     private Integer cardNumber;
 
     private Double creditLimit;
-
+    private String status;
     @ManyToOne
     @JoinColumn(name = "Customer_Id", referencedColumnName = "id")
     Customer customer;
