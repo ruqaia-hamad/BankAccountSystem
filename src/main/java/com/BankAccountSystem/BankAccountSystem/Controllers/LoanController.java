@@ -107,4 +107,17 @@ public class LoanController {
             return ResponseEntity.badRequest().body(errorMessage);
         }
     }
+
+    @PostMapping("/loanStatus")
+    public ResponseEntity<String> approveOrRejectLoan(@PathVariable Integer loanId, String status) {
+        Loan loan = loanService.approveOrRejectLoan(loanId, status);
+        String message;
+        if (loan.getStatus().equals(status)){
+            message = "Loan application status updated successfully";
+        } else {
+            message = "Failed to update loan application status";
+        }
+        return ResponseEntity.ok(message);
+    }
+
 }

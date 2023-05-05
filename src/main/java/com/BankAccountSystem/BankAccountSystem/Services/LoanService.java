@@ -10,6 +10,7 @@ import com.BankAccountSystem.BankAccountSystem.Repositories.LoanRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequestForUpdate;
+import com.BankAccountSystem.BankAccountSystem.Slack.SlackClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,8 @@ public class LoanService {
     @Autowired
     LoanPaymentRepository paymentRepository;
 
+    @Autowired
+    SlackClient slackClient;
 
     public void CreateLoan(LoanRequest loanRequest) throws ParseException {
         Loan loan=new Loan();
@@ -84,6 +87,21 @@ public class LoanService {
         payment.setPaymentAmount(paymentAmount);
         payment.setPaymentDate(LocalDate.now());
         paymentRepository.save(payment);
+        return loan;
+    }
+
+    public Loan approveOrRejectLoan(Integer loanId, String status) {
+        Loan loan = loanRepository.getLoanById(loanId);
+        if (status.equalsIgnoreCase("approved")) {
+            loan.setStatus("approved");
+            slackClient.sendMessage("New loan application approved - Loan ID: " + loanId);
+        } else if (status.equalsIgnoreCase("rejected")) {
+            loan.setStatus("rejected");
+            slackClient.sendMessage("New loan application rejected - Loan ID: " + loanId);
+        } else {
+            throw new ResourceNotFoundException("Invalid loan status");
+        }
+        loanRepository.save(loan);
         return loan;
     }
 
