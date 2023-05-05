@@ -3,7 +3,9 @@ package com.BankAccountSystem.BankAccountSystem.Services;
 
 import com.BankAccountSystem.BankAccountSystem.Models.Account;
 import com.BankAccountSystem.BankAccountSystem.Models.CreditCard;
+import com.BankAccountSystem.BankAccountSystem.Models.CreditCardPayment;
 import com.BankAccountSystem.BankAccountSystem.Models.Customer;
+import com.BankAccountSystem.BankAccountSystem.Repositories.CreditCardPaymentRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CreditCardRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CustomerRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CreditCardService {
@@ -26,13 +30,14 @@ public class CreditCardService {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    CreditCardPaymentRepository creditCardPaymentRepository;
+
     public void CreateNewCard(CreditCardRequest creditCardRequest) throws ParseException {
         CreditCard creditCard=new CreditCard();
         creditCard.setCardNumber(creditCardRequest.getCardNumber());
         creditCard.setCreditLimit(creditCardRequest.getCreditLimit());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(creditCardRequest.getCreatedDate());
-        creditCard.setCreatedDate(convetedDate);
+        creditCard.setCreatedDate(new Date());
         creditCard.setIsActive(creditCardRequest.getIsActive());
         Customer customer = customerRepository.getCustomerById(creditCardRequest.getCustomerId());
         creditCard.setCustomer(customer);
@@ -45,9 +50,6 @@ public class CreditCardService {
         creditCard.setId(creditCardRequestForUpdate.getId());
         creditCard.setCardNumber(creditCardRequestForUpdate.getCardNumber());
         creditCard.setCreditLimit(creditCardRequestForUpdate.getCreditLimit());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(creditCardRequestForUpdate.getCreatedDate());
-        creditCard.setCreatedDate(convetedDate);
         creditCard.setIsActive(creditCardRequestForUpdate.getIsActive());
         Customer customer = customerRepository.getCustomerById(creditCardRequestForUpdate.getCustomerId());
         creditCard.setCustomer(customer);
@@ -57,6 +59,35 @@ public class CreditCardService {
 
     public void deleteCreditCard(Integer id) {
        creditCardRepository.deleteCreditCard(id);
+    }
+
+
+
+
+    public CreditCard getCreditCardById(Integer creditCardId) {
+        return creditCardRepository.getCreditCardById(creditCardId);
+    }
+
+    public List<CreditCard> getCreditCardByCustomerId(Integer id) {
+        return creditCardRepository.findByCustomerId(id);
+
+    }
+
+    public CreditCard makePayment(Integer creditCardId, Double paymentAmount) {
+        CreditCard creditCard = creditCardRepository.getCreditCardById(creditCardId);
+        Double newBalance = creditCard.getCreditLimit() - paymentAmount;
+        if (newBalance < 0) {
+            throw new ResourceNotFoundException("Payment amount cannot exceed current balance");
+        }
+
+        creditCard.setCreditLimit(newBalance);
+        creditCardRepository.save(creditCard);
+        CreditCardPayment creditCardPayment = new CreditCardPayment();
+        creditCardPayment.setCreditCard(creditCard);
+        creditCardPayment.setPaymentAmount(paymentAmount);
+        creditCardPayment.setPaymentDate(LocalDate.now());
+        creditCardPaymentRepository.save(creditCardPayment);
+        return creditCard;
     }
 
 }

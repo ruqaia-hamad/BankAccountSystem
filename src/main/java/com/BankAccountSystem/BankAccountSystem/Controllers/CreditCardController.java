@@ -7,10 +7,9 @@ import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.Services.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -57,4 +56,26 @@ public class CreditCardController {
         }
 
     }
+
+    @PostMapping("/makePayment")
+    public ResponseEntity<String> getCreditCardById(@RequestParam Integer creditCardId, Double amount) {
+        try {
+            CreditCard creditCard = creditCardService.makePayment(creditCardId, amount);
+
+            if (creditCard == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Credit card not found with id: " + creditCardId);
+            }
+            String message = "Payment made successfully\n" +
+                    "Card Number: " + creditCard.getCardNumber() + "\n" +
+                    "Payment Amount: " + amount + "\n" +
+                    "Credit Card new Limit: " + creditCard.getCreditLimit();
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+
+            String errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+
+    }
+
 }
