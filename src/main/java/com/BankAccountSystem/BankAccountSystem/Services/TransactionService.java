@@ -38,11 +38,12 @@ public class TransactionService {
     private String sender;
 
     public void CreateNewTransaction(TransactionRequest transactionRequest) throws ParseException {
+        double fees = 0.100;
         Transaction transaction = new Transaction();
-        transaction.setAmount(transactionRequest.getAmount());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(transactionRequest.getTransactionDate());
-        transaction.setTransactionDate(convetedDate);
+        double transactionAmount = transactionRequest.getAmount();
+        double transactionWithFees = transactionAmount * fees;
+        transaction.setAmount(transactionAmount);
+        transaction.setTransactionDate(new Date());
         transaction.setIsActive(transactionRequest.getIsActive());
         Account account = accountRepository.getAccountById(transactionRequest.getAccountId());
         transaction.setAccount(account);
@@ -50,7 +51,7 @@ public class TransactionService {
 
 
         Double accountBalance = account.getAmount();
-        if (accountBalance < transaction.getAmount()) {
+        if (accountBalance < transactionWithFees) {
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom(sender);
@@ -67,12 +68,12 @@ public class TransactionService {
 
             return;
         }
-        account.setAmount(accountBalance - transaction.getAmount());
+        account.setAmount(accountBalance - transactionWithFees);
         accountRepository.save(account);
 
         try {
 
-            Double balanceBeforeTransaction = transaction.getAccount().getAmount() + transaction.getAmount();
+            Double balanceBeforeTransaction = transaction.getAccount().getAmount() + transactionWithFees;
             Double balanceAfterTransaction = transaction.getAccount().getAmount();
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -95,20 +96,8 @@ public class TransactionService {
 
     }
 
-    public void updateTransaction(TransactionRequestForUpdate transactionRequestForUpdate) throws ParseException {
-        Transaction transaction = new Transaction();
-        transaction.setId(transactionRequestForUpdate.getId());
-        transaction.setAmount(transactionRequestForUpdate.getAmount());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(transactionRequestForUpdate.getTransactionDate());
-        transaction.setTransactionDate(convetedDate);
-        transaction.setIsActive(transactionRequestForUpdate.getIsActive());
-        Account account = accountRepository.getAccountById(transactionRequestForUpdate.getAccountId());
-        transaction.setAccount(account);
-        transactionRepository.save(transaction);
 
 
-    }
 
     public void deleteTransaction(Integer id) {
         transactionRepository.deleteTransaction(id);

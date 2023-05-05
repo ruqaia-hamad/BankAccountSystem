@@ -1,4 +1,5 @@
 package com.BankAccountSystem.BankAccountSystem.Controllers;
+
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequestForUpdate;
@@ -22,8 +23,9 @@ public class TransactionController {
     @Autowired
     SlackClient slackClient;
 
+
     @RequestMapping(value = "/createTransaction", method = RequestMethod.POST)
-    public String createTransaction(@RequestBody TransactionRequest transactionRequest)throws ParseException {
+    public String createTransaction(@RequestBody TransactionRequest transactionRequest) throws ParseException {
         try {
             transactionService.CreateNewTransaction(transactionRequest);
             slackClient.sendMessage(" Transaction created Successfully");
@@ -31,19 +33,6 @@ public class TransactionController {
         } catch (Exception e) {
             slackClient.sendMessage("Transaction failed");
             return "Transaction failed";
-        }
-
-    }
-
-
-    @RequestMapping(value = "/updateTransaction", method = RequestMethod.POST)
-    public String updateTransaction(@RequestBody TransactionRequestForUpdate transactionRequestForUpdate)throws ParseException {
-        try {
-            transactionService.updateTransaction(transactionRequestForUpdate);
-            return " Transaction updated Successfully ";
-        } catch (Exception e) {
-
-            return "Transaction updated failed";
         }
 
     }
