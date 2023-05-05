@@ -86,4 +86,25 @@ public class LoanController {
             return ResponseEntity.badRequest().body(errorMessage);
         }
     }
+
+
+    @PostMapping("/makePaymentFromLoan")
+    public ResponseEntity<String> makePaymentFromLoan(@RequestParam Integer loanId, Double amount) {
+        try {
+            Loan loan = loanService.makePaymentFromLoan(loanId, amount);
+
+            if (loan == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan not found with id: " + loanId);
+            }
+            String message = "Payment made successfully\n" +
+                    "Loan id: " + loan.getId() + "\n" +
+                    "Payment Amount: " + amount + "\n" +
+                    "Loan new balance: " + loan.getAmount();
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+
+            String errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+    }
 }

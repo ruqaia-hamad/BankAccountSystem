@@ -3,7 +3,9 @@ package com.BankAccountSystem.BankAccountSystem.Services;
 import com.BankAccountSystem.BankAccountSystem.Models.Account;
 import com.BankAccountSystem.BankAccountSystem.Models.Customer;
 import com.BankAccountSystem.BankAccountSystem.Models.Loan;
+import com.BankAccountSystem.BankAccountSystem.Models.LoanPayment;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CustomerRepository;
+import com.BankAccountSystem.BankAccountSystem.Repositories.LoanPaymentRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.LoanRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -25,6 +28,9 @@ public class LoanService {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    LoanPaymentRepository paymentRepository;
 
 
     public void CreateLoan(LoanRequest loanRequest) throws ParseException {
@@ -64,4 +70,21 @@ public class LoanService {
         loanRepository.save(loan);
         return loan;
     }
+    public Loan makePaymentFromLoan(Integer LoanId, Double paymentAmount) {
+        Loan loan = loanRepository.getLoanById(LoanId);
+        Double newBalance = loan.getAmount()- paymentAmount;
+        if (newBalance < 0) {
+            throw new ResourceNotFoundException("Payment amount cannot exceed current balance");
+        }
+
+        loan.setAmount(newBalance);
+        loanRepository.save(loan);
+        LoanPayment payment = new LoanPayment();
+        payment.setLoan(loan);
+        payment.setPaymentAmount(paymentAmount);
+        payment.setPaymentDate(LocalDate.now());
+        paymentRepository.save(payment);
+        return loan;
+    }
+
 }
