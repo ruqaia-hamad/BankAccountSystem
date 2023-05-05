@@ -31,9 +31,7 @@ public class LoanService {
         Loan loan=new Loan();
         loan.setAmount(loanRequest.getAmount());
         loan.setInsertRate(loanRequest.getInsertRate());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(loanRequest.getCreatedDate());
-        loan.setCreatedDate(convetedDate);
+        loan.setCreatedDate(new Date());
         loan.setIsActive(loanRequest.getIsActive());
         Customer customer = customerRepository.getCustomerById(loanRequest.getCustomerId());
         loan.setCustomer(customer);
@@ -45,9 +43,7 @@ public class LoanService {
         loan.setId(loanRequestForUpdate.getId());
         loan.setAmount(loanRequestForUpdate.getAmount());
         loan.setInsertRate(loanRequestForUpdate.getInsertRate());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(loanRequestForUpdate.getCreatedDate());
-        loan.setCreatedDate(convetedDate);
+        loan.setCreatedDate(new Date());
         loan.setIsActive(loanRequestForUpdate.getIsActive());
         Customer customer = customerRepository.getCustomerById(loanRequestForUpdate.getCustomerId());
         loan.setCustomer(customer);
@@ -56,5 +52,16 @@ public class LoanService {
 
     public void deleteLoan(Integer id) {
         loanRepository.deleteLoan(id);
+    }
+
+    public Loan calculateLoanInterest(Integer loanId, Double interestRate) {
+
+        Loan loan = loanRepository.getLoanById(loanId);
+        Double currentBalance = loan.getAmount();
+        Double interestCalculation= currentBalance * interestRate;
+        Double newBalance=currentBalance+interestCalculation;
+        loan.setAmount(newBalance);
+        loanRepository.save(loan);
+        return loan;
     }
 }

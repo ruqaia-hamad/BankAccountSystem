@@ -20,6 +20,8 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
     @Query("UPDATE Loan c SET c.isActive=0  WHERE c.id = :id")
     void deleteLoan(@Param("id") Integer id);
 
+    @Query(value = "SELECT m FROM Loan m where m.id= :loanId")
+    Loan getLoanById(@Param("loanId") Integer id);
 
     @Query("SELECT l FROM Loan l WHERE l.customer = :customer AND l.isActive = 'TRUE'")
     Loan findActiveLoansByCustomer(@Param("customer") Customer customer);

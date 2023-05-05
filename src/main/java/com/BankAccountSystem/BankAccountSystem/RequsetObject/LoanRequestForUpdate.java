@@ -17,4 +17,5 @@ public class LoanRequestForUpdate {
     private String createdDate;
     private Boolean isActive;
     private Integer customerId;
+    private String status;
 }

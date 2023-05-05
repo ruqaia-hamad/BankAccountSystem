@@ -22,5 +22,7 @@ public class Loan  extends  BaseEntity{
     private Double amount;
     private Double insertRate;
 
+    private String status;
+
 
 }

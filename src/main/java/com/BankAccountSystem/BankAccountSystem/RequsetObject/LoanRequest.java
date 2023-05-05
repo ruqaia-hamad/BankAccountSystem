@@ -16,5 +16,7 @@ public class LoanRequest {
     private  String createdDate;
     private Boolean isActive;
     private Integer customerId;
+    private String status;
+
 
 }

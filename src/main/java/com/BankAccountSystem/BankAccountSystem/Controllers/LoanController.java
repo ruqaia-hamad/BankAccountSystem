@@ -1,16 +1,16 @@
 package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 
+import com.BankAccountSystem.BankAccountSystem.Models.Loan;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.SchedulesJobs.Schedule;
 import com.BankAccountSystem.BankAccountSystem.Services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -66,9 +66,24 @@ public class LoanController {
     }
 
 
-    @RequestMapping("/calculateInterest")
-    public String calculateInterest() {
-        schedule.calculateDailyInterest();
-        return "Interest calculation complete.";
+    @PostMapping("/calculateLoanInterest")
+    public ResponseEntity<String> calculateCardInterest(@RequestParam Integer loanId, Double interestRate) {
+        try {
+
+            Loan loan = loanService.calculateLoanInterest(loanId, interestRate);
+
+            if (loan == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan not found with id: " + loanId);
+            }
+            String message = "Interest calculation made successfully\n" +
+                    "loan Id: " + loan.getId() + "\n" +
+                    "Interest Rate: " + interestRate + "\n" +
+                    "Loan new Balance: " + loan.getAmount();
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+
+            String errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
     }
 }
