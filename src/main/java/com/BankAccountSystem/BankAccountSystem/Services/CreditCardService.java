@@ -90,4 +90,15 @@ public class CreditCardService {
         return creditCard;
     }
 
+    public CreditCard applyInterest(Integer creditCardId, Double interestRate) {
+
+        CreditCard creditCard = creditCardRepository.getCreditCardById(creditCardId);
+        Double currentBalance = creditCard.getCreditLimit();
+        Double interestCalculation = currentBalance * interestRate;
+        Double newBalance = currentBalance + interestCalculation;
+        creditCard.setCreditLimit(newBalance);
+        creditCardRepository.save(creditCard);
+        return creditCard;
+    }
+
 }

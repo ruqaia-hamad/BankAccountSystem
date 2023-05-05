@@ -77,5 +77,23 @@ public class CreditCardController {
         }
 
     }
+    @PostMapping("/calculateCardInterest")
+    public ResponseEntity<String> calculateCardInterest(@RequestParam Integer creditCardId,  Double interestRate) {
+        try {
 
+            CreditCard creditCard = creditCardService.applyInterest(creditCardId,interestRate);
+
+            if (creditCard == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Credit card not found with id: " + creditCardId);
+            }
+            String message = "Interest calculation made successfully\n" +
+                    "Card Number: " + creditCard.getCardNumber() + "\n" +
+                    "Interest Rate: " + interestRate + "\n" +
+                    "Credit Card new Balance: " + creditCard.getCreditLimit();
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+
+            String errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }}
 }
