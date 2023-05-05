@@ -21,6 +21,8 @@ public class Account extends  BaseEntity {
 
     private Integer accountNumber;
 
+    private Double accountInterestRate;
+
     @ManyToOne
     @JoinColumn(name = "Customer_Id", referencedColumnName = "id")
     Customer customer;
