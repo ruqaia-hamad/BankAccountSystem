@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -85,33 +86,33 @@ public class AccountService {
     }
 
 
-    public Double calculateInterestForAccount(Integer accountId) {
+    public Account calculateInterestForAccount(Integer accountId, Double interestRate) {
         Account account = accountRepository.getAccountById(accountId);
-        Customer customer = account.getCustomer();
-        Loan loan = loanRepository.findActiveLoansByCustomer(customer);
-        if (loan == null) {
-            throw new ResourceNotFoundException("Active loan not found for customer: " + customer.getId());
-        }
-        Double interestRate = loan.getInsertRate();
-        Double balance = account.getAmount();
-        Double interest = balance * interestRate;
-        return interest;
+        Double currentBalance = account.getAmount();
+        Double interestCalculation= currentBalance * interestRate;
+        Double newBalance=currentBalance+interestCalculation;
+        account.setAmount(newBalance);
+        accountRepository.save(account);
+        return account;
     }
+
 
 
     public String generateMonthlyStatement(Integer accountId) {
         Account account = accountRepository.getAccountById(accountId);
         Customer customer = account.getCustomer();
+        LocalDate currentDate = LocalDate.now();
+        LocalDate statementDate = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), 1);
+
         String statementForAccount = "Monthly Statement for Account: " + account.getAccountNumber() + "\n" +
                 "Customer Name: " + customer.getCustomerName() + "\n" +
-                "Month: " + customer.getCreatedDate().getMonth()+ "\n" +
+                "Month: " + statementDate.getMonth().toString() + " " + statementDate.getYear() + "\n" +
                 "Customer Email: " + customer.getEmail() + "\n" +
                 "Customer Phone: " + customer.getPhoneNumber() + "\n" +
-                "Account Balance: " + account.getAmount() + "\n" +
-                "Interest : " + calculateInterestForAccount(accountId) + "\n";
+                "Account Balance: " + account.getAmount() + "\n" ;
+
         return statementForAccount;
     }
-
 
 
     public List<Transaction> getAccountHistory(Integer accountId) {

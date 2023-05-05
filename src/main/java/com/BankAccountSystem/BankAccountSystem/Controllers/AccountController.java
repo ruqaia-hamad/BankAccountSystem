@@ -1,6 +1,7 @@
 package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 
+import com.BankAccountSystem.BankAccountSystem.Models.Account;
 import com.BankAccountSystem.BankAccountSystem.Models.Transaction;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequestForUpdate;
@@ -8,6 +9,7 @@ import com.BankAccountSystem.BankAccountSystem.RequsetObject.CustomerRequestForC
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
 import com.BankAccountSystem.BankAccountSystem.Services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,15 +74,25 @@ public class AccountController {
     }
 
 
-    @GetMapping("/{accountId}/interest")
-    public ResponseEntity<?> calculateInterestForAccount(@PathVariable Integer accountId) {
-        Double interest = accountService.calculateInterestForAccount(accountId);
-        String message = "Interest calculated successfully.";
-        Map<String, Object> response = new HashMap<>();
-        response.put("interest", interest);
-        response.put("message", message);
-        return ResponseEntity.ok(response);
-    }
+    @GetMapping("/calculateInterestForAccount")
+    public ResponseEntity<String>  calculateInterestForAccount(@RequestParam Integer accountId,  Double interestRate) {
+        try {
+
+            Account account=accountService.calculateInterestForAccount(accountId,interestRate);
+
+            if (account == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found with id: " + accountId);
+            }
+            String message = "Interest calculation made successfully\n" +
+                    "Account Number: " + account.getAccountNumber()+ "\n" +
+                    "Interest Rate: " + interestRate + "\n" +
+                    "Loan new Balance: " + account.getAmount();
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+
+            String errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }}
 
 
     @GetMapping("/{accountId}/accountStatement")
