@@ -6,7 +6,9 @@ import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.SchedulesJobs.Schedule;
+import com.BankAccountSystem.BankAccountSystem.Services.InvalidLoanStatusException;
 import com.BankAccountSystem.BankAccountSystem.Services.LoanService;
+import com.BankAccountSystem.BankAccountSystem.Services.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class LoanController {
 
 
     @RequestMapping(value = "/createLoan", method = RequestMethod.POST)
-    public String createLoan(@RequestBody LoanRequest loanRequest)throws ParseException {
+    public String createLoan(@RequestBody LoanRequest loanRequest) throws ParseException {
         try {
             loanService.CreateLoan(loanRequest);
             return " Loan created Successfully ";
@@ -41,7 +43,7 @@ public class LoanController {
 
 
     @RequestMapping(value = "/updateLoan", method = RequestMethod.POST)
-    public String updateLoan(@RequestBody LoanRequestForUpdate loanRequestForUpdate)throws ParseException {
+    public String updateLoan(@RequestBody LoanRequestForUpdate loanRequestForUpdate) throws ParseException {
         try {
             loanService.updateLoan(loanRequestForUpdate);
             return " Loan updated Successfully ";
@@ -109,15 +111,18 @@ public class LoanController {
     }
 
     @PostMapping("/loanStatus")
-    public ResponseEntity<String> approveOrRejectLoan(@PathVariable Integer loanId, String status) {
-        Loan loan = loanService.approveOrRejectLoan(loanId, status);
-        String message;
-        if (loan.getStatus().equals(status)){
-            message = "Loan application status updated successfully";
-        } else {
-            message = "Failed to update loan application status";
+    public String approveOrRejectLoan(@RequestParam Integer loanId, double annualIncome) {
+        try {
+            Loan loan = loanService.approveOrRejectLoan(loanId, annualIncome);
+            String message = loan.getStatus().equals("approved") ? "Loan application approved" : "Loan application rejected";
+            return message;
+        } catch (ResourceNotFoundException e) {
+            return "Loan not found";
+        } catch (Exception e) {
+            return "An error occurred while processing the request";
         }
-        return ResponseEntity.ok(message);
     }
+
+
 
 }

@@ -37,18 +37,19 @@ public class LoanService {
     SlackClient slackClient;
 
     public void CreateLoan(LoanRequest loanRequest) throws ParseException {
-        Loan loan=new Loan();
+        Loan loan = new Loan();
         loan.setAmount(loanRequest.getAmount());
         loan.setInsertRate(loanRequest.getInsertRate());
         loan.setCreatedDate(new Date());
         loan.setIsActive(loanRequest.getIsActive());
+        loan.setStatus(loan.getStatus());
         Customer customer = customerRepository.getCustomerById(loanRequest.getCustomerId());
         loan.setCustomer(customer);
         loanRepository.save(loan);
     }
 
     public void updateLoan(LoanRequestForUpdate loanRequestForUpdate) throws ParseException {
-        Loan loan=new Loan();
+        Loan loan = new Loan();
         loan.setId(loanRequestForUpdate.getId());
         loan.setAmount(loanRequestForUpdate.getAmount());
         loan.setInsertRate(loanRequestForUpdate.getInsertRate());
@@ -67,15 +68,16 @@ public class LoanService {
 
         Loan loan = loanRepository.getLoanById(loanId);
         Double currentBalance = loan.getAmount();
-        Double interestCalculation= currentBalance * interestRate;
-        Double newBalance=currentBalance+interestCalculation;
+        Double interestCalculation = currentBalance * interestRate;
+        Double newBalance = currentBalance + interestCalculation;
         loan.setAmount(newBalance);
         loanRepository.save(loan);
         return loan;
     }
+
     public Loan makePaymentFromLoan(Integer LoanId, Double paymentAmount) {
         Loan loan = loanRepository.getLoanById(LoanId);
-        Double newBalance = loan.getAmount()- paymentAmount;
+        Double newBalance = loan.getAmount() - paymentAmount;
         if (newBalance < 0) {
             throw new ResourceNotFoundException("Payment amount cannot exceed current balance");
         }
@@ -90,19 +92,22 @@ public class LoanService {
         return loan;
     }
 
-    public Loan approveOrRejectLoan(Integer loanId, String status) {
+    public Loan approveOrRejectLoan(Integer loanId, double annualIncome) {
         Loan loan = loanRepository.getLoanById(loanId);
-        if (status.equalsIgnoreCase("approved")) {
+
+        if (annualIncome >= 600) {
             loan.setStatus("approved");
-            slackClient.sendMessage("New loan application approved - Loan ID: " + loanId);
-        } else if (status.equalsIgnoreCase("rejected")) {
+            slackClient.sendMessage("New laon application approved - Loan ID: " + loanId);
+        } else {
             loan.setStatus("rejected");
             slackClient.sendMessage("New loan application rejected - Loan ID: " + loanId);
-        } else {
-            throw new ResourceNotFoundException("Invalid loan status");
         }
+
         loanRepository.save(loan);
         return loan;
     }
+
+
+
 
 }
