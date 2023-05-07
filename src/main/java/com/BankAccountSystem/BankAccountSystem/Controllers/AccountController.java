@@ -95,16 +95,16 @@ public class AccountController {
         }}
 
 
-    @GetMapping("/{accountId}/accountStatement")
-    public ResponseEntity<String> generateMonthlyStatementForAccount(@PathVariable Integer accountId) {
+    @GetMapping("/accountStatement")
+    public ResponseEntity<String> generateMonthlyStatementForAccount(@RequestParam Integer accountId) {
         String statement = accountService.generateMonthlyStatement(accountId);
         return ResponseEntity.ok(statement);
     }
 
 
 
-    @GetMapping("/{accountId}/accountHistory")
-    public ResponseEntity<List<Transaction>> getAccountHistory(@PathVariable Integer accountId) {
+    @GetMapping("/accountHistory")
+    public ResponseEntity<List<Transaction>> getAccountHistory(@RequestParam Integer accountId) {
         List<Transaction> transactions = accountService.getAccountHistory(accountId);
         return ResponseEntity.ok(transactions);
     }

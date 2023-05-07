@@ -43,6 +43,7 @@ public class TransactionService {
         double transactionAmount = transactionRequest.getAmount();
         double transactionWithFees = transactionAmount * fees;
         transaction.setAmount(transactionAmount);
+        transaction.setCreatedDate(new Date());
         transaction.setTransactionDate(new Date());
         transaction.setIsActive(transactionRequest.getIsActive());
         Account account = accountRepository.getAccountById(transactionRequest.getAccountId());

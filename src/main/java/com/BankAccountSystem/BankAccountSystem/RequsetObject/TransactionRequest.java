@@ -12,7 +12,7 @@ import java.util.Date;
 public class TransactionRequest {
 
     private Double amount;
-    private String transactionDate;
+    private Date transactionDate;
     private Boolean isActive;
     private Integer accountId;
 }

@@ -19,11 +19,35 @@ public class ReportController {
     ReportService reportService;
 
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/AccountReport", method = RequestMethod.GET)
     public String generateReportAccount() throws FileNotFoundException, JRException {
 
         return reportService.generateReportForAccount();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/AccountTransactionReport", method = RequestMethod.GET)
+    public String generateReportAccountTransaction() throws FileNotFoundException, JRException {
+
+        return reportService.generateReportForTransactions();
+    }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/creditCardReport", method = RequestMethod.GET)
+    public String generateReportCreditCard() throws FileNotFoundException, JRException {
+
+        return reportService.generateReportForCreditCards();
+    }
+
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/LoanPaymentReport", method = RequestMethod.GET)
+    public String generateReportForLoanPayment() throws FileNotFoundException, JRException {
+
+        return reportService.generateReportForLoanPayment();
     }
 }
 

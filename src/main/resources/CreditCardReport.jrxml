@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CreditCardPayment" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1ad4f830-5a71-4ec2-8f91-922f2653cfde">
+    <field name="id" class="java.lang.Integer">
+    </field>
+    <field name="creditCardId" class="java.lang.Integer">
+    </field>
+    <field name="cardNumber" class="java.lang.Integer">
+    </field>
+    <field name="creditLimit" class="java.lang.Double">
+    </field>
+    <field name="paymentAmount" class="java.lang.Double">
+    </field>
+    <field name="paymentDate" class="java.time.LocalDate">
+    </field>
+    <background>
+        <band/>
+    </background>
+    <title>
+        <band height="72">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="a251fe33-2963-4b28-95e7-8b7cb54b362a"/>
+                <staticText>
+                    <reportElement x="20" y="20" width="375" height="43" forecolor="#FFFFFF" uuid="bbf52002-54e2-4ab9-8999-23464ff41de4"/>
+                    <textElement>
+                        <font size="34" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Bank Account Report]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="b8103cc6-4bd0-4fb6-8d59-d51ac2fe35d9"/>
+                    <textElement textAlignment="Right">
+                        <font size="14" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Credit Card Payment Report]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="13"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="21">
+            <line>
+                <reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="faeb0db2-e7d7-46c0-bf95-9d4ddcd7de15"/>
+            </line>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="d082a990-24dd-410d-a5da-fadfde9332b0">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="544abca1-b752-4700-a586-686d66256f6d"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Id]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="92" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="3482d71c-0880-497d-b3df-cd3bb3b3f35c">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="db60c457-0327-4b24-9194-d965759921ac"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Credit Card Id]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="184" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="ab4d369d-b786-4657-8440-b8a34116beef">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c401f510-6f07-46b0-914f-19e281d6a2db"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Card Number]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="276" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="0ec2e9d7-d922-4be7-b7e9-86f174f6c6de">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="56a49d43-0f4a-4bd7-8b12-9dd53bc6bce6"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Credit Limit]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="368" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="bca5cf58-5653-44c3-a95f-3ec773797bb8">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="daa5230d-cc58-46dc-a83a-ebaaec5bd6d2"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Payment Amount]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="460" y="0" width="92" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="ba0fe4a0-a63e-424e-92f0-a0170f60c6f1">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="14287105-4bf8-4885-b70c-7d9406c45965"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Payment Date]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="20">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="bb7e52e7-9a00-4a67-a413-cc577ac4661a"/>
+            </line>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="0" y="0" width="92" height="20" uuid="987e34ac-54a6-4fba-b6a3-ce6d1a4bdfcf">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="544abca1-b752-4700-a586-686d66256f6d"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="92" y="0" width="92" height="20" uuid="3a803db1-7a3f-42fc-bd92-788caa47f73b">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="db60c457-0327-4b24-9194-d965759921ac"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{creditCardId}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="184" y="0" width="92" height="20" uuid="0423cafa-9cbb-471a-881f-ba1f996daffb">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c401f510-6f07-46b0-914f-19e281d6a2db"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{cardNumber}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="276" y="0" width="92" height="20" uuid="fda93e70-371d-4351-b23a-baba4f1fad84">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="56a49d43-0f4a-4bd7-8b12-9dd53bc6bce6"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{creditLimit}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="368" y="0" width="92" height="20" uuid="cbecbe1a-6034-4474-b135-e0012d485e80">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="daa5230d-cc58-46dc-a83a-ebaaec5bd6d2"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{paymentAmount}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="460" y="0" width="92" height="20" uuid="afd924d5-0b02-429a-aee4-5ae1c90af2f6">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="14287105-4bf8-4885-b70c-7d9406c45965"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{paymentDate}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band/>
+    </columnFooter>
+    <pageFooter>
+        <band height="17">
+            <textField>
+                <reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="4893209a-914c-4979-a4f3-e5bd4fc82bcb"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="574c8e97-f1d0-45f7-83ba-2f5236a8d590"/>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="0" y="4" width="100" height="13" uuid="5e365c0e-73d5-463e-8717-7b05b54f9e86"/>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band/>
+    </summary>
+</jasperReport>

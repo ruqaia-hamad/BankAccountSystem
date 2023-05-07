@@ -23,4 +23,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
 
     List<Transaction> findByAccount(Account account);
+
+    @Query(value = "SELECT m FROM Transaction m")
+    List<Transaction> getAllTransactions();
 }
