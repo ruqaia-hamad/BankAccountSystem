@@ -1,16 +1,14 @@
 package com.BankAccountSystem.BankAccountSystem.Services;
 
 
-import com.BankAccountSystem.BankAccountSystem.Models.Account;
-import com.BankAccountSystem.BankAccountSystem.Models.CreditCard;
-import com.BankAccountSystem.BankAccountSystem.Models.CreditCardPayment;
-import com.BankAccountSystem.BankAccountSystem.Models.Customer;
+import com.BankAccountSystem.BankAccountSystem.Models.*;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CreditCardPaymentRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CreditCardRepository;
 import com.BankAccountSystem.BankAccountSystem.Repositories.CustomerRepository;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequestForUpdate;
+import com.BankAccountSystem.BankAccountSystem.Slack.SlackClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +30,9 @@ public class CreditCardService {
 
     @Autowired
     CreditCardPaymentRepository creditCardPaymentRepository;
+
+    @Autowired
+    SlackClient slackClient;
 
     public void CreateNewCard(CreditCardRequest creditCardRequest) throws ParseException {
         CreditCard creditCard=new CreditCard();
@@ -97,6 +98,23 @@ public class CreditCardService {
         Double interestCalculation = currentBalance * interestRate;
         Double newBalance = currentBalance + interestCalculation;
         creditCard.setCreditLimit(newBalance);
+        creditCardRepository.save(creditCard);
+        return creditCard;
+    }
+
+
+
+    public CreditCard approveOrRejectCreditCard(Integer creditCardId, double annualIncome) {
+        CreditCard creditCard =creditCardRepository.getCreditCardById(creditCardId);
+
+        if (annualIncome >= 600) {
+            creditCard.setStatus("approved");
+            slackClient.sendMessage("New laon application approved - Loan ID: " + creditCardId);
+        } else {
+            creditCard.setStatus("rejected");
+            slackClient.sendMessage("New loan application rejected - Loan ID: " + creditCard);
+        }
+
         creditCardRepository.save(creditCard);
         return creditCard;
     }

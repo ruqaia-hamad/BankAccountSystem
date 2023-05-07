@@ -2,10 +2,12 @@ package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 
 import com.BankAccountSystem.BankAccountSystem.Models.CreditCard;
+import com.BankAccountSystem.BankAccountSystem.Models.Loan;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.CreditCardRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.Services.CreditCardService;
+import com.BankAccountSystem.BankAccountSystem.Services.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -113,5 +115,19 @@ public class CreditCardController {
     public String getCreditCardByStatus(@RequestParam Integer creditCardId) {
         CreditCard creditCard = creditCardService.getCreditCardById(creditCardId);
         return "The Credit Card Status is :" + creditCard.getStatus();
+    }
+
+
+    @PostMapping("/loanStatus")
+    public String approveOrRejectCreditCard(@RequestParam Integer creditCardId, double annualIncome) {
+        try {
+            CreditCard creditCard = creditCardService.approveOrRejectCreditCard(creditCardId, annualIncome);
+            String message = creditCard.getStatus().equals("approved") ? "Credit Card application approved" : "Credit Card  application rejected";
+            return message;
+        } catch (ResourceNotFoundException e) {
+            return "Credit Card not found";
+        } catch (Exception e) {
+            return "An error occurred while processing the request";
+        }
     }
 }
