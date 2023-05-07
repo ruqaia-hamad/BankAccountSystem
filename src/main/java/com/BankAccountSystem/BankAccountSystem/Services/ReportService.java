@@ -45,8 +45,7 @@ public class ReportService {
             account.getAmount();
             account.getCustomer().getId();
             account.getCreatedDate();
-            account.getIsActive();
-            AccountCustomerDTO accountsReport = new AccountCustomerDTO( account.getId(),account.getAmount(), account.getAccountNumber(),account.getCreatedDate(), account.getIsActive(),account.getCustomer().getId());
+            AccountCustomerDTO accountsReport = new AccountCustomerDTO( account.getId(),account.getAmount(), account.getAccountNumber(),account.getCreatedDate(),account.getCustomer().getId());
             customerReports.add(accountsReport);
         }
         File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\AccountReport.jrxml");
