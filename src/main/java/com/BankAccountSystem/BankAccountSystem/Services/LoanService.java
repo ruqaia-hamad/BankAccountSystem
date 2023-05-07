@@ -92,10 +92,10 @@ public class LoanService {
         return loan;
     }
 
-    public Loan approveOrRejectLoan(Integer loanId, double annualIncome) {
+    public Loan approveOrRejectLoan(Integer loanId, double creditScore) {
         Loan loan = loanRepository.getLoanById(loanId);
 
-        if (annualIncome >= 600) {
+        if (creditScore >= 850) {
             loan.setStatus("approved");
             slackClient.sendMessage("New laon application approved - Loan ID: " + loanId);
         } else {

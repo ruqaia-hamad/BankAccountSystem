@@ -119,9 +119,9 @@ public class CreditCardController {
 
 
     @PostMapping("/loanStatus")
-    public String approveOrRejectCreditCard(@RequestParam Integer creditCardId, double annualIncome) {
+    public String approveOrRejectCreditCard(@RequestParam Integer creditCardId, double creditScore) {
         try {
-            CreditCard creditCard = creditCardService.approveOrRejectCreditCard(creditCardId, annualIncome);
+            CreditCard creditCard = creditCardService.approveOrRejectCreditCard(creditCardId, creditScore);
             String message = creditCard.getStatus().equals("approved") ? "Credit Card application approved" : "Credit Card  application rejected";
             return message;
         } catch (ResourceNotFoundException e) {

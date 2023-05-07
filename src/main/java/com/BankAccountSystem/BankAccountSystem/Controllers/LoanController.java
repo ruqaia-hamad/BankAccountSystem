@@ -111,9 +111,9 @@ public class LoanController {
     }
 
     @PostMapping("/loanStatus")
-    public String approveOrRejectLoan(@RequestParam Integer loanId, double annualIncome) {
+    public String approveOrRejectLoan(@RequestParam Integer loanId, double creditScore) {
         try {
-            Loan loan = loanService.approveOrRejectLoan(loanId, annualIncome);
+            Loan loan = loanService.approveOrRejectLoan(loanId, creditScore);
             String message = loan.getStatus().equals("approved") ? "Loan application approved" : "Loan application rejected";
             return message;
         } catch (ResourceNotFoundException e) {

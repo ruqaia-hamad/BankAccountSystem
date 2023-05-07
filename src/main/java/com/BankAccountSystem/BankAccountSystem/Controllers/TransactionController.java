@@ -6,6 +6,7 @@ import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequestF
 import com.BankAccountSystem.BankAccountSystem.Services.TransactionService;
 import com.BankAccountSystem.BankAccountSystem.Slack.SlackClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,8 @@ public class TransactionController {
     SlackClient slackClient;
 
 
+
+        @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/createTransaction", method = RequestMethod.POST)
     public String createTransaction(@RequestBody TransactionRequest transactionRequest) throws ParseException {
         try {

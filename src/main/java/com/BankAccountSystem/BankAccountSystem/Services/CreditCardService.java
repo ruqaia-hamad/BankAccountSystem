@@ -104,15 +104,15 @@ public class CreditCardService {
 
 
 
-    public CreditCard approveOrRejectCreditCard(Integer creditCardId, double annualIncome) {
+    public CreditCard approveOrRejectCreditCard(Integer creditCardId, double creditScore) {
         CreditCard creditCard =creditCardRepository.getCreditCardById(creditCardId);
 
-        if (annualIncome >= 600) {
+        if (creditScore >= 850) {
             creditCard.setStatus("approved");
-            slackClient.sendMessage("New laon application approved - Loan ID: " + creditCardId);
+            slackClient.sendMessage("New Credit Card application approved - Credit Card ID: " + creditCardId);
         } else {
             creditCard.setStatus("rejected");
-            slackClient.sendMessage("New loan application rejected - Loan ID: " + creditCard);
+            slackClient.sendMessage("New Credit Card application rejected - Credit Card ID: " + creditCard);
         }
 
         creditCardRepository.save(creditCard);

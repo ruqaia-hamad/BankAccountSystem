@@ -18,7 +18,6 @@ public class AccountCustomerDTO {
 
     private Integer accountNumber;
     private Date createdDate;
-    private Boolean isActive;
     private Integer customerId;
 
     public Double getAmount() {
@@ -33,9 +32,6 @@ public class AccountCustomerDTO {
         return createdDate;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
 
     public Integer getCustomerId() {
         return customerId;
@@ -53,20 +49,16 @@ public class AccountCustomerDTO {
         this.createdDate = createdDate;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
 
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 
-    public AccountCustomerDTO(Integer id, Double amount, Integer accountNumber, Date createdDate, Boolean isActive, Integer customerId) {
+    public AccountCustomerDTO(Integer id, Double amount, Integer accountNumber, Date createdDate, Integer customerId) {
         this.id = id;
         this.amount = amount;
         this.accountNumber = accountNumber;
         this.createdDate = createdDate;
-        this.isActive = isActive;
         this.customerId = customerId;
     }
 }
