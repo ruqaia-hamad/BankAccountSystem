@@ -11,6 +11,7 @@ import com.BankAccountSystem.BankAccountSystem.Services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -28,7 +29,7 @@ public class AccountController {
 
 
 
-
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     public String createAccount(@RequestBody AccountRequest accountRequest)throws ParseException {
         try {
@@ -41,7 +42,7 @@ public class AccountController {
 
     }
 
-
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/updateAccount", method = RequestMethod.POST)
     public String updateAccount(@RequestBody AccountRequestForUpdate accountRequestForUpdate)throws ParseException {
         try {
@@ -55,6 +56,8 @@ public class AccountController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
+
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Integer id){
         try {
@@ -66,14 +69,14 @@ public class AccountController {
         }
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/updateBalance")
     public String makeTransaction(@RequestBody TransactionRequest transactionRequest) {
         accountService.updateBalance(transactionRequest);
         return "Transaction completed successfully";
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/calculateInterestForAccount")
     public ResponseEntity<String>  calculateInterestForAccount(@RequestParam Integer accountId,  Double interestRate) {
         try {
@@ -95,6 +98,7 @@ public class AccountController {
         }}
 
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/accountStatement")
     public ResponseEntity<String> generateMonthlyStatementForAccount(@RequestParam Integer accountId) {
         String statement = accountService.generateMonthlyStatement(accountId);
@@ -102,7 +106,7 @@ public class AccountController {
     }
 
 
-
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/accountHistory")
     public ResponseEntity<List<Transaction>> getAccountHistory(@RequestParam Integer accountId) {
         List<Transaction> transactions = accountService.getAccountHistory(accountId);

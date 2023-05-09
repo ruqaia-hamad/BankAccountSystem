@@ -11,6 +11,7 @@ import com.BankAccountSystem.BankAccountSystem.Services.ResourceNotFoundExceptio
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -22,6 +23,8 @@ public class CreditCardController {
 
     @Autowired
     CreditCardService creditCardService;
+
+    @PreAuthorize("hasRole('USER')")
 
     @RequestMapping(value = "/createCreditCard", method = RequestMethod.POST)
     public String createCreditCard(@RequestBody CreditCardRequest creditCardRequest)throws ParseException {
@@ -35,6 +38,7 @@ public class CreditCardController {
 
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/updateCreditCard", method = RequestMethod.POST)
     public String updateCreditCard(@RequestBody CreditCardRequestForUpdate creditCardRequestForUpdate)throws ParseException {
         try {
@@ -48,6 +52,7 @@ public class CreditCardController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/deleteCreditCard", method = RequestMethod.GET)
     public String deleteCreditCard(Integer id){
         try {
@@ -60,6 +65,7 @@ public class CreditCardController {
 
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/makePayment")
     public ResponseEntity<String> getCreditCardById(@RequestParam Integer creditCardId, Double amount) {
         try {
@@ -80,6 +86,8 @@ public class CreditCardController {
         }
 
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/calculateCardInterest")
     public ResponseEntity<String> calculateCardInterest(@RequestParam Integer creditCardId,  Double interestRate) {
         try {
@@ -101,6 +109,7 @@ public class CreditCardController {
         }}
 
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/findCreditByCustomer")
     public ResponseEntity<?> getCreditByCustomer(@RequestParam("customerId") Integer customerId) {
         List<CreditCard> creditCards = creditCardService.getCreditCardByCustomerId(customerId);

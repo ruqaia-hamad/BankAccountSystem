@@ -26,7 +26,7 @@ public class TransactionController {
 
 
 
-        @PreAuthorize("hasRole('ADMIN')")
+        @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/createTransaction", method = RequestMethod.POST)
     public String createTransaction(@RequestBody TransactionRequest transactionRequest) throws ParseException {
         try {
@@ -40,7 +40,7 @@ public class TransactionController {
 
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/deleteTransaction", method = RequestMethod.POST)
     public String deleteTransaction(Integer id) {
         try {
