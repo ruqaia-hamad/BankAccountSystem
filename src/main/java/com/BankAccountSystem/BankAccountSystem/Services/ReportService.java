@@ -6,6 +6,7 @@ import com.BankAccountSystem.BankAccountSystem.DTO.CreditCardPaymentDTO;
 import com.BankAccountSystem.BankAccountSystem.DTO.LoanPaymentDTO;
 import com.BankAccountSystem.BankAccountSystem.Models.*;
 import com.BankAccountSystem.BankAccountSystem.Repositories.*;
+import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 public class ReportService {
@@ -44,7 +44,6 @@ public class ReportService {
 
     @Autowired
     LoanPaymentRepository loanPaymentRepository;
-
 
     public String generateReportForAccount() throws FileNotFoundException, JRException {
         List<Account> findAccountWithCustomerId = accountRepository.getAllAccounts();
@@ -138,7 +137,7 @@ public class ReportService {
 
             );
 
-    loanPaymentDTOS.add(loanPaymentDTO);
+            loanPaymentDTOS.add(loanPaymentDTO);
         }
 
         File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\LoanPaymentReport.jrxml");
@@ -152,5 +151,31 @@ public class ReportService {
 
         return "Report generated: " + pathToReports + "\\LoanPaymentReport.pdf";
     }
+
+
+    public String generateReportForTransactionsInSpecificMonth(int year, int month) throws FileNotFoundException, JRException {
+        List<Transaction> findAllTransactions = transactionRepository.getAllTransactions();
+        List<AccountTransactionDTO> transactionDTOS = new ArrayList<>();
+            for (Transaction transaction : findAllTransactions) {
+                LocalDate transactionDate = transaction.getTransactionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                if (transactionDate.getYear() == year && transactionDate.getMonthValue() == month) {
+                transaction.getId();
+                transaction.getAccount().getId();
+                transaction.getAmount();
+                transaction.getTransactionDate();
+                AccountTransactionDTO transactionDTO = new AccountTransactionDTO(transaction.getId(), transaction.getAccount().getId(), transaction.getAmount(), transaction.getTransactionDate());
+                transactionDTOS.add(transactionDTO);
+            }
+        }
+        File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\AccountTransactions.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transactionDTOS);
+        Map<String, Object> paramters = new HashMap<>();
+        paramters.put("CreatedBy", "Ruqiya");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramters, dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\AccountTransactionsForSpecificMonth.pdf");
+        return "Report generated : " + pathToReports + "\\AccountTransactionsForSpecificMonth.pdf";
+    }
+
 
 }
