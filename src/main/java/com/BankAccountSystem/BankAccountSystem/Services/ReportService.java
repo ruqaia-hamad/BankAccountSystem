@@ -156,9 +156,9 @@ public class ReportService {
     public String generateReportForTransactionsInSpecificMonth(int year, int month) throws FileNotFoundException, JRException {
         List<Transaction> findAllTransactions = transactionRepository.getAllTransactions();
         List<AccountTransactionDTO> transactionDTOS = new ArrayList<>();
-            for (Transaction transaction : findAllTransactions) {
-                LocalDate transactionDate = transaction.getTransactionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                if (transactionDate.getYear() == year && transactionDate.getMonthValue() == month) {
+        for (Transaction transaction : findAllTransactions) {
+            LocalDate transactionDate = transaction.getTransactionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (transactionDate.getYear() == year && transactionDate.getMonthValue() == month) {
                 transaction.getId();
                 transaction.getAccount().getId();
                 transaction.getAmount();
@@ -175,6 +175,30 @@ public class ReportService {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramters, dataSource);
         JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\AccountTransactionsForSpecificMonth.pdf");
         return "Report generated : " + pathToReports + "\\AccountTransactionsForSpecificMonth.pdf";
+    }
+
+    public String generateMonthlyReportForAccount(int year, int month, Integer accountId) throws FileNotFoundException, JRException {
+        List<Transaction> findAllTransactions = transactionRepository.getTransactionsByAccountId(accountId);
+        List<AccountTransactionDTO> transactionDTOS = new ArrayList<>();
+        for (Transaction transaction : findAllTransactions) {
+            LocalDate transactionDate = transaction.getTransactionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (transactionDate.getYear() == year && transactionDate.getMonthValue() == month) {
+                transaction.getId();
+                transaction.getAccount().getId();
+                transaction.getAmount();
+                transaction.getTransactionDate();
+                AccountTransactionDTO transactionDTO = new AccountTransactionDTO(transaction.getId(), transaction.getAccount().getId(), transaction.getAmount(), transaction.getTransactionDate());
+                transactionDTOS.add(transactionDTO);
+            }
+        }
+        File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\AccountTransactions.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transactionDTOS);
+        Map<String, Object> paramters = new HashMap<>();
+        paramters.put("CreatedBy", "Ruqiya");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramters, dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\MonthlyReportForAccount.pdf");
+        return "Report generated : " + pathToReports + "\\MonthlyReportForAccount.pdf";
     }
 
 

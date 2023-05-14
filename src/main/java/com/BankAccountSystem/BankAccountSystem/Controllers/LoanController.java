@@ -2,11 +2,9 @@ package com.BankAccountSystem.BankAccountSystem.Controllers;
 
 
 import com.BankAccountSystem.BankAccountSystem.Models.Loan;
-import com.BankAccountSystem.BankAccountSystem.RequsetObject.AccountRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequest;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.LoanRequestForUpdate;
 import com.BankAccountSystem.BankAccountSystem.SchedulesJobs.Schedule;
-import com.BankAccountSystem.BankAccountSystem.Services.InvalidLoanStatusException;
 import com.BankAccountSystem.BankAccountSystem.Services.LoanService;
 import com.BankAccountSystem.BankAccountSystem.Services.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

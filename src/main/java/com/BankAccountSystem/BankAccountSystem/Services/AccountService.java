@@ -18,6 +18,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,15 +102,33 @@ public class AccountService {
         Customer customer = account.getCustomer();
         LocalDate currentDate = LocalDate.now();
         LocalDate statementDate = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), 1);
+        List<Transaction> allTransactions = transactionRepository.getAllTransactions();
+        List<Transaction> transactions = new ArrayList<>();
 
-        String statementForAccount = "Monthly Statement for Account: " + account.getAccountNumber() + "\n" +
-                "Customer Name: " + customer.getCustomerName() + "\n" +
-                "Month: " + statementDate.getMonth().toString() + " " + statementDate.getYear() + "\n" +
-                "Customer Email: " + customer.getEmail() + "\n" +
-                "Customer Phone: " + customer.getPhoneNumber() + "\n" +
-                "Account Balance: " + account.getAmount() + "\n" ;
+        for (Transaction transaction : allTransactions) {
+            LocalDate transactionDate = transaction.getTransactionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (transactionDate.getYear() == statementDate.getYear() && transactionDate.getMonth() == statementDate.getMonth()) {
+                transactions.add(transaction);
+            }
+        }
 
-        return statementForAccount;
+        StringBuilder statementForAccount = new StringBuilder();
+        statementForAccount.append("Monthly Statement for Account: ").append(account.getAccountNumber()).append("\n");
+        statementForAccount.append("Customer Name: ").append(customer.getCustomerName()).append("\n");
+        statementForAccount.append("Month: ").append(statementDate.getMonth().toString()).append(" ").append(statementDate.getYear()).append("\n");
+        statementForAccount.append("Customer Email: ").append(customer.getEmail()).append("\n");
+        statementForAccount.append("Customer Phone: ").append(customer.getPhoneNumber()).append("\n");
+        statementForAccount.append("Account Balance: ").append(account.getAmount()).append("\n");
+        statementForAccount.append("Transactions:").append("\n");
+
+        for (Transaction transaction : transactions) {
+            statementForAccount.append("Transaction ID: ").append(transaction.getId()).append("\n");
+            statementForAccount.append("Transaction Amount: ").append(transaction.getAmount()).append("\n");
+            statementForAccount.append("Transaction Date: ").append(transaction.getTransactionDate()).append("\n");
+            statementForAccount.append("\n");
+        }
+
+        return statementForAccount.toString();
     }
 
 

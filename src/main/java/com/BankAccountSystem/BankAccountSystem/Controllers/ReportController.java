@@ -34,11 +34,11 @@ public class ReportController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/AccountTransactionForMonthReport", method = RequestMethod.GET)
-    public String generateReportAccountTransactionForMonth( int year,int month) throws FileNotFoundException, JRException {
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(value = "/monthlyReportForAccount", method = RequestMethod.GET)
+    public String generateMonthlyReportForAccount( int year,int month,Integer accountId) throws FileNotFoundException, JRException {
 
-        return reportService.generateReportForTransactionsInSpecificMonth(year,month);
+        return reportService.generateMonthlyReportForAccount(month,year,accountId);
     }
 
 
@@ -56,6 +56,14 @@ public class ReportController {
     public String generateReportForLoanPayment() throws FileNotFoundException, JRException {
 
         return reportService.generateReportForLoanPayment();
+    }
+
+
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(value = "/AccountsTransactionForMonthReport", method = RequestMethod.GET)
+    public String generateReportAccountTransactionForMonth( int year,int month) throws FileNotFoundException, JRException {
+
+        return reportService.generateReportForTransactionsInSpecificMonth(year,month);
     }
 }
 
