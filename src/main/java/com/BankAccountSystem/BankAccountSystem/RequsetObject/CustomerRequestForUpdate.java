@@ -15,6 +15,5 @@ public class CustomerRequestForUpdate {
     private String email;
 
     private String phoneNumber;
-    private  String createdDate;
     private Boolean isActive;
 }

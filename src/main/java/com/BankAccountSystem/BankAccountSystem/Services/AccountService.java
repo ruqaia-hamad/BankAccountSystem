@@ -58,9 +58,6 @@ public class AccountService {
         account.setId(accountRequestForUpdate.getId());
         account.setAccountNumber(accountRequestForUpdate.getAccountNumber());
         account.setAmount(accountRequestForUpdate.getAmount());
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convetedDate = formatter.parse(accountRequestForUpdate.getCreatedDate());
-        account.setCreatedDate(convetedDate);
         account.setIsActive(accountRequestForUpdate.getIsActive());
         Customer customer = customerRepository.getCustomerById(accountRequestForUpdate.getCustomerId());
         account.setCustomer(customer);

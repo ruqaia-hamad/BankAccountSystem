@@ -14,7 +14,6 @@ public class LoanRequestForUpdate {
 
     private Double amount;
     private Double insertRate;
-    private String createdDate;
     private Boolean isActive;
     private Integer customerId;
     private String status;

@@ -14,7 +14,6 @@ public class TransactionRequestForUpdate {
     private Integer id;
     private Double amount;
     private Date transactionDate;
-    private  String createdDate;
     private Boolean isActive;
     private Integer accountId;
 }

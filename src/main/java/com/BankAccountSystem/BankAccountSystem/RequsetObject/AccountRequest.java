@@ -11,7 +11,6 @@ import lombok.Setter;
 public class AccountRequest {
 
     private Double amount ;
-
     private Integer accountNumber;
     private  String createdDate;
     private Boolean isActive;

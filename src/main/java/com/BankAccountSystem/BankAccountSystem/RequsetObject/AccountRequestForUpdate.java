@@ -10,9 +10,7 @@ import lombok.Setter;
 public class AccountRequestForUpdate {
     private Integer id;
     private Double amount ;
-
     private Integer accountNumber;
-    private  String createdDate;
     private Boolean isActive;
     private Integer customerId;
 }
