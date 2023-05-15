@@ -138,4 +138,12 @@ public class AccountService {
         return transactions;
     }
 
+
+    public double getAccountBalance(Integer accountId) {
+        Account account = accountRepository.getAccountById(accountId);
+        if (account != null) {
+            return account.getAmount();
+        }
+        throw new ResourceNotFoundException("Account not found with ID: " + accountId);
+    }
 }

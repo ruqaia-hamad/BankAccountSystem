@@ -113,5 +113,11 @@ public class AccountController {
         return ResponseEntity.ok(transactions);
     }
 
+
+    @GetMapping("/getAccountBalance")
+    public double getAccountBalance(@RequestParam Integer accountId) {
+        return accountService.getAccountBalance(accountId);
+    }
+
 }
 
