@@ -1,9 +1,6 @@
 package com.BankAccountSystem.BankAccountSystem.Services;
 
-import com.BankAccountSystem.BankAccountSystem.DTO.AccountCustomerDTO;
-import com.BankAccountSystem.BankAccountSystem.DTO.AccountTransactionDTO;
-import com.BankAccountSystem.BankAccountSystem.DTO.CreditCardPaymentDTO;
-import com.BankAccountSystem.BankAccountSystem.DTO.LoanPaymentDTO;
+import com.BankAccountSystem.BankAccountSystem.DTO.*;
 import com.BankAccountSystem.BankAccountSystem.Models.*;
 import com.BankAccountSystem.BankAccountSystem.Repositories.*;
 import com.BankAccountSystem.BankAccountSystem.RequsetObject.TransactionRequest;
@@ -76,7 +73,7 @@ public class ReportService {
             transaction.getAccount().getId();
             transaction.getAmount();
             transaction.getTransactionDate();
-            AccountTransactionDTO transactionDTO = new AccountTransactionDTO(transaction.getId(), transaction.getAccount().getId(), transaction.getAmount(), transaction.getTransactionDate());
+            AccountTransactionDTO transactionDTO = new AccountTransactionDTO( transaction.getAccount().getId(),transaction.getId(), transaction.getAmount(), transaction.getTransactionDate());
             transactionDTOS.add(transactionDTO);
         }
         File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\AccountTransactions.jrxml");
@@ -163,7 +160,7 @@ public class ReportService {
                 transaction.getAccount().getId();
                 transaction.getAmount();
                 transaction.getTransactionDate();
-                AccountTransactionDTO transactionDTO = new AccountTransactionDTO(transaction.getId(), transaction.getAccount().getId(), transaction.getAmount(), transaction.getTransactionDate());
+                AccountTransactionDTO transactionDTO = new AccountTransactionDTO(transaction.getAccount().getId(),transaction.getId(), transaction.getAmount(), transaction.getTransactionDate());
                 transactionDTOS.add(transactionDTO);
             }
         }
@@ -177,21 +174,21 @@ public class ReportService {
         return "Report generated : " + pathToReports + "\\AccountTransactionsForSpecificMonth.pdf";
     }
 
-    public String generateMonthlyReportForAccount(int year, int month, Integer accountId) throws FileNotFoundException, JRException {
-        List<Transaction> findAllTransactions = transactionRepository.getTransactionsByAccountId(accountId);
-        List<AccountTransactionDTO> transactionDTOS = new ArrayList<>();
+    public String generateMonthlyReportForAccount(int year,int month,Integer accountId) throws FileNotFoundException, JRException {
+        Account account=accountRepository.findById(accountId).get();
+        List<Transaction> findAllTransactions = transactionRepository.findByAccount(account);
+        List<MonthlyTransactionForAccountDTO> transactionDTOS = new ArrayList<>();
         for (Transaction transaction : findAllTransactions) {
             LocalDate transactionDate = transaction.getTransactionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             if (transactionDate.getYear() == year && transactionDate.getMonthValue() == month) {
                 transaction.getId();
-                transaction.getAccount().getId();
                 transaction.getAmount();
                 transaction.getTransactionDate();
-                AccountTransactionDTO transactionDTO = new AccountTransactionDTO(transaction.getId(), transaction.getAccount().getId(), transaction.getAmount(), transaction.getTransactionDate());
+                MonthlyTransactionForAccountDTO transactionDTO = new MonthlyTransactionForAccountDTO(transaction.getId(), transaction.getTransactionDate(), transaction.getAmount());
                 transactionDTOS.add(transactionDTO);
             }
         }
-        File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\AccountTransactions.jrxml");
+        File file = new File("C:\\Users\\user015\\Documents\\BankAccountSystem\\src\\main\\resources\\MonthlyTransactionForAccount.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(transactionDTOS);
         Map<String, Object> paramters = new HashMap<>();
@@ -200,6 +197,8 @@ public class ReportService {
         JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\MonthlyReportForAccount.pdf");
         return "Report generated : " + pathToReports + "\\MonthlyReportForAccount.pdf";
     }
+
+
 
 
 }

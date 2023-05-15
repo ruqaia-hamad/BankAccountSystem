@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.FileNotFoundException;
@@ -36,9 +37,9 @@ public class ReportController {
 
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/monthlyReportForAccount", method = RequestMethod.GET)
-    public String generateMonthlyReportForAccount( int year,int month,Integer accountId) throws FileNotFoundException, JRException {
+    public String generateMonthlyReportForAccount(@RequestParam int year, int month,Integer accountId) throws FileNotFoundException, JRException {
 
-        return reportService.generateMonthlyReportForAccount(month,year,accountId);
+        return reportService.generateMonthlyReportForAccount(year,month,accountId);
     }
 
 
@@ -61,7 +62,7 @@ public class ReportController {
 
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/AccountsTransactionForMonthReport", method = RequestMethod.GET)
-    public String generateReportAccountTransactionForMonth( int year,int month) throws FileNotFoundException, JRException {
+    public String generateReportAccountTransactionForMonth(@RequestParam int year,int month) throws FileNotFoundException, JRException {
 
         return reportService.generateReportForTransactionsInSpecificMonth(year,month);
     }

@@ -48,7 +48,7 @@ public class AccountTransactionDTO {
         this.transactionDate = transactionDate;
     }
 
-    public AccountTransactionDTO(Integer id, Integer accountId, Double amount, Date transactionDate) {
+    public AccountTransactionDTO( Integer accountId,Integer id, Double amount, Date transactionDate) {
         this.id = id;
         this.amount = amount;
         this.transactionDate = transactionDate;
