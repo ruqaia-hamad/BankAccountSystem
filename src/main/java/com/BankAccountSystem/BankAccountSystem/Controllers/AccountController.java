@@ -114,6 +114,7 @@ public class AccountController {
     }
 
 
+     @PreAuthorize("hasRole('USER')")
     @GetMapping("/getAccountBalance")
     public double getAccountBalance(@RequestParam Integer accountId) {
         return accountService.getAccountBalance(accountId);
